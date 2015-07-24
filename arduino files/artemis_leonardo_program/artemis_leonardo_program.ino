@@ -9,6 +9,7 @@
 #include <Keypad.h>
 
 
+
 /*
 Main button matrix for the console 
 */
@@ -25,12 +26,14 @@ const byte COLS = 5; //three columns
     5 = comms 
 */
 const int stationTestHarness = 0;
-const int stationHelm = 1;
-const int stationWeapons = 2;
+const int stationHelm        = 1;
+const int stationWeapons     = 2;
 const int stationEngineering = 3;
-const int stationScience = 4; 
-const int stationComms = 5; 
-const int stationCommsB1 = 6; 
+const int stationScience     = 4; 
+const int stationComms       = 5; 
+
+const int stationCommsB1     = 6; 
+const int stationScienceB1   = 7; 
 
 
 const int buttonShift = 3;
@@ -105,12 +108,6 @@ char keysScience[ROWS][COLS] = {
     {'.','.','.','.','.'},
 };
 
-//    {'y','M','.','.'}, 
-//    {'i','N','.','.'}, 
-//    {'u','U','.','.'},
-//    {'.','.','.','.'},
-//    {'.','.','.','.'},
-
 // stationID = 5 (stationPin0,stationPin2)
 char keysComms[ROWS][COLS] = {
     {'.','r','0','.','.'}, 
@@ -130,6 +127,21 @@ char keysCommsB1[ROWS][COLS] = {
     {'.','.','.','.','.'},
 }; 
 
+// Science on bridge 1.  
+char keysScienceB1[ROWS][COLS] = {
+    {'p','o','.','.','.'}, 
+    {'u','i','.','.','.'},     
+    {'y','U','.','.','.'},
+    {'.','.','.','.','.'},
+    {'.','.','.','.','.'},
+}; 
+
+//N =  down arrow     zoom out
+//M =  up arrow       zoom in
+//U =  return key   = scan button 
+//y =  y            = scan closest
+//i =  i              scan previous
+//u =  u              scan next
 
 //    {'1','2','3','.'}, 
 //    {'4','5','6','.'}, 
@@ -150,6 +162,7 @@ Keypad keypadEngineering = Keypad( makeKeymap(keysEngineering), rowPins, colPins
 Keypad keypadScience =     Keypad( makeKeymap(keysScience), rowPins, colPins, ROWS, COLS );
 Keypad keypadComms =       Keypad( makeKeymap(keysComms), rowPins, colPins, ROWS, COLS );
 Keypad keypadCommsB1 =     Keypad( makeKeymap(keysCommsB1), rowPins, colPins, ROWS, COLS );
+Keypad keypadScienceB1 =   Keypad( makeKeymap(keysScienceB1), rowPins, colPins, ROWS, COLS );
 
 // dedicated buttons and thier states
 int buttonPin[] = {1,0,2,3};
@@ -390,8 +403,11 @@ void loop(){
    // comment out this line for 'production' use
    //readStationID();
    //stationID=stationEngineering;
-   stationID=stationCommsB1;
    //stationID=stationComms;
+
+   // Bridge1 items
+   //stationID=stationCommsB1;
+   stationID=stationScienceB1; 
 
    //DEBUG Serial.println("-MainLoop");
 
@@ -422,6 +438,9 @@ void loop(){
        break;
      case stationCommsB1: 
        key = keypadCommsB1.getKey();
+       break;
+     case stationScienceB1: 
+       key = keypadScienceB1.getKey();
        break;
 
      default:
